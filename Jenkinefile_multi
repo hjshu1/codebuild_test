@@ -21,13 +21,13 @@ pipeline {
     stages {
         stage('Start Build') {
             steps {
-                slackSend ( color: "${env.GREEN}", message: "[START BUILD]: ${env.JOB_NAME}:[${env.GIT_LOCAL_BRANCH}]\n ${env.COMMIT_AUTHOR}:${env.COMMIT_MSG}\n(${env.BUILD_URL}consoleText) ")
+                slackSend ( color: "${env.GREEN}", message: "[START BUILD]: ${env.JOB_NAME}:[${env.BRANCH_NAME}]\n ${env.COMMIT_AUTHOR}:${env.COMMIT_MSG}\n(${env.BUILD_URL}consoleText) ")
             }
         }
 
         stage('Build Develop') {
             when {
-                expression { env.GIT_BRANCH == 'develop' }
+                branch 'develop'
             }
             steps {        
                 sshagent (credentials: ['jenkins_ssh_pri']) {
@@ -42,7 +42,7 @@ pipeline {
         
         stage('Build main') {           
             when {
-                expression { env.GIT_BRANCH == 'origin/main' }
+                branch 'main'
             }
         
             steps {
