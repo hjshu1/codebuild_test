@@ -1,3 +1,15 @@
+def get_commit_msg(){
+    script {
+        return sh(script : "git show -s --format=%B ${env.GIT_COMMIT}", returnStdout: true).trim().replace (' ', '-spc-')
+    }
+}
+
+def get_commit_author(){
+    script {
+        return sh(script : "git --no-pager show -s --format=%an ${env.GIT_COMMIT}", returnStdout: true).trim()
+    }
+}
+
 pipeline {
     agent any
     stages {
@@ -26,14 +38,16 @@ pipeline {
     post {
         success {
             // slackSend (channel: '#migrator', color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
-            slackSend ( color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL}consoleText)")
+            slackSend ( color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL}consoleText) (COMMIT_MSG) (COMMIT_AUTHOR)")
         }
         failure {
-            slackSend ( color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL}consoleText)")
+            slackSend ( color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL}consoleText) (COMMIT_MSG) (COMMIT_AUTHOR)")
             // slackSend (channel: '#migrator', color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
         }
     }
     environment {
         TARGET_HOST = "root@192.168.20.1"
+        COMMIT_MSG = get_commit_msg()
+        COMMIT_AUTHOR = get_commit_author() 
     }
 }
