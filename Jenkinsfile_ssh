@@ -1,0 +1,39 @@
+pipeline {
+    agent any
+    stages {
+        stage('test ssh') {
+            steps {        
+                sshagent (credentials: ['jenkins_ssh_pri']) {
+                sh """
+                    ssh -o StrictHostKeyChecking=no ${TARGET_HOST} "pwd"
+                """
+                }
+            }
+        }
+
+        stage('multiline ssh') {
+            steps {        
+                sshagent (credentials: ['jenkins_ssh_pri']) {
+                sh """
+                    ssh -o StrictHostKeyChecking=no ${TARGET_HOST} '
+                    /bin/sh /root/HOME/run_front.sh
+                    '
+                """
+                }
+            }
+        }
+    }
+    post {
+        success {
+            // slackSend (channel: '#migrator', color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+            slackSend ( color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+        }
+        failure {
+            slackSend ( color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+            // slackSend (channel: '#migrator', color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+        }
+    }
+    environment {
+        TARGET_HOST = "root@192.168.20.1"
+    }
+}
