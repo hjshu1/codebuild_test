@@ -37,8 +37,8 @@ pipeline {
             // when {
             //     expression { (env.GIT_BRANCH).endsWith('main') == True }
             // }
-            steps {
-                if ( (env.GIT_BRANCH).endsWith('main') ) {
+            if ( (env.GIT_BRANCH).endsWith('main') ){
+                steps {
                     sshagent (credentials: ['jenkins_ssh_pri']) {
                     sh """
                         ssh -o StrictHostKeyChecking=no ${ssh_dev} '
