@@ -13,21 +13,21 @@ def get_commit_author(){
 pipeline {
     agent any
     stages {
-        stage('test ssh') {
-            steps {        
-                sshagent (credentials: ['jenkins_ssh_pri']) {
-                sh """
-                    ssh -o StrictHostKeyChecking=no ${TARGET_HOST} "pwd"
-                """
-                }
-            }
-        }
+        // stage('test ssh') {
+        //     steps {        
+        //         sshagent (credentials: ['jenkins_ssh_pri']) {
+        //         sh """
+        //             ssh -o StrictHostKeyChecking=no ${TARGET_HOST} "pwd"
+        //         """
+        //         }
+        //     }
+        // }
 
         stage('multiline ssh') {
             steps {        
                 sshagent (credentials: ['jenkins_ssh_pri']) {
                 sh """
-                    ssh -o StrictHostKeyChecking=no ${TARGET_HOST} '
+                    ssh -o StrictHostKeyChecking=no ${ssh_dev} '
                     /bin/sh /root/HOME/run_front.sh
                     '
                 """
