@@ -38,7 +38,13 @@ pipeline {
                 expression { env.GIT_BRANCH.endsWith('main') == True }
             }
             steps {        
-                echo 'adgsd'
+                sshagent (credentials: ['jenkins_ssh_pri']) {
+                sh """
+                    ssh -o StrictHostKeyChecking=no ${ssh_dev} '
+                    echo ${HOSTNAME}
+                    '
+                """
+                }
             }
         }
     }
