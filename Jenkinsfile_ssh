@@ -33,11 +33,12 @@ pipeline {
                 }
             }
         }
-        stage('Build main') {
+        if ( (env.GIT_BRANCH).endsWith('main') ){
+            stage('Build main') {
             // when {
             //     expression { (env.GIT_BRANCH).endsWith('main') == True }
             // }
-            if ( (env.GIT_BRANCH).endsWith('main') ){
+            
                 steps {
                     sshagent (credentials: ['jenkins_ssh_pri']) {
                     sh """
