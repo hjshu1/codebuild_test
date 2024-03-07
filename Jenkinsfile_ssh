@@ -35,13 +35,13 @@ pipeline {
         }
         stage('Build main') {
             when {
-                expression { env.GIT_BRANCH.endsWith('main') == True }
+                expression { (env.GIT_BRANCH).endsWith('main') == True }
             }
             steps {        
                 sshagent (credentials: ['jenkins_ssh_pri']) {
                 sh """
                     ssh -o StrictHostKeyChecking=no ${ssh_dev} '
-                    echo ${HOSTNAME}
+                    echo fas
                     '
                 """
                 }
