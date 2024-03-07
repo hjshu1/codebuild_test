@@ -15,7 +15,7 @@ pipeline {
     stages {
         stage('Start Build') {
             steps {
-                slackSend ( color: ${env.GREEN}, message: "[START BUILD]: ${env.JOB_NAME}:[${env.GIT_BRANCH}]\n ${env.COMMIT_AUTHOR}:${env.COMMIT_MSG}\n(${env.BUILD_URL}consoleText) ")
+                slackSend ( color: "${env.GREEN}", message: "[START BUILD]: ${env.JOB_NAME}:[${env.GIT_BRANCH}]\n ${env.COMMIT_AUTHOR}:${env.COMMIT_MSG}\n(${env.BUILD_URL}consoleText) ")
             }
         }
 
@@ -46,10 +46,10 @@ pipeline {
     post {
         success {
             // slackSend (channel: '#migrator', color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
-            slackSend ( color: ${env.GREEN}, message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL}consoleText) (${env.COMMIT_MSG}) (${env.COMMIT_AUTHOR})")
+            slackSend ( color: "${env.GREEN}", message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL}consoleText) (${env.COMMIT_MSG}) (${env.COMMIT_AUTHOR})")
         }
         failure {
-            slackSend ( color: ${env.RED}, message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL}consoleText) (${env.COMMIT_MSG}) (${env.COMMIT_AUTHOR})")
+            slackSend ( color: "${env.RED}", message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL}consoleText) (${env.COMMIT_MSG}) (${env.COMMIT_AUTHOR})")
             // slackSend (channel: '#migrator', color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
         }
     }
