@@ -13,15 +13,11 @@ def get_commit_author(){
 pipeline {
     agent any
     stages {
-        // stage('test ssh') {
-        //     steps {        
-        //         sshagent (credentials: ['jenkins_ssh_pri']) {
-        //         sh """
-        //             ssh -o StrictHostKeyChecking=no ${TARGET_HOST} "pwd"
-        //         """
-        //         }
-        //     }
-        // }
+        stage('Start Build') {
+            steps {
+                slackSend ( color: '#00FF00', message: "[START BUILD]: ${env.JOB_NAME}:[${env.GIT_BRANCH}]\n ${env.COMMIT_AUTHOR}:${env.COMMIT_MSG}\n(${env.BUILD_URL}consoleText) ")
+            }
+        }
 
         stage('multiline ssh') {
             steps {        
