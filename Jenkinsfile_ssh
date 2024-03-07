@@ -34,11 +34,7 @@ pipeline {
             }
         }
         
-        stage('Build main') {
-        // when {
-        //     expression { (env.GIT_BRANCH).endsWith('main') == True }
-        // }
-            
+        stage('Build main') {           
             when {
                 expression { env.GIT_BRANCH == 'origin/main' }
             }
@@ -47,14 +43,14 @@ pipeline {
                 sshagent (credentials: ['jenkins_ssh_pri']) {
                 sh """
                     ssh -o StrictHostKeyChecking=no ${ssh_dev} '
-                    echo fas
+                    cd /root/HOME/childfunds/greenbell-front
+                    docker build --build-arg BUILD=build-only:dev -t greenbell-front-image -f ./ci/Dockerfile .
                     '
                 """
                 }
             }
             
         }
-        
     }
 
     post {
