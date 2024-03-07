@@ -15,11 +15,14 @@ pipeline {
     stages {
         stage('Start Build') {
             steps {
-                slackSend ( color: '#00FF00', message: "[START BUILD]: ${env.JOB_NAME}:[${env.GIT_BRANCH}]\n ${env.COMMIT_AUTHOR}:${env.COMMIT_MSG}\n(${env.BUILD_URL}consoleText) ")
+                slackSend ( color: ${env.GREEN}, message: "[START BUILD]: ${env.JOB_NAME}:[${env.GIT_BRANCH}]\n ${env.COMMIT_AUTHOR}:${env.COMMIT_MSG}\n(${env.BUILD_URL}consoleText) ")
             }
         }
 
-        stage('multiline ssh') {
+        stage('Build Develop') {
+            when {
+                expression { env.GIT_BRANCH == 'develop' }
+            }
             steps {        
                 sshagent (credentials: ['jenkins_ssh_pri']) {
                 sh """
@@ -30,19 +33,29 @@ pipeline {
                 }
             }
         }
+        stage('Build main') {
+            when {
+                expression { env.GIT_BRANCH == 'main' }
+            }
+            steps {        
+                echo 'adgsd'
+            }
+        }
     }
+
     post {
         success {
             // slackSend (channel: '#migrator', color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
-            slackSend ( color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL}consoleText) (${env.COMMIT_MSG}) (${env.COMMIT_AUTHOR})")
+            slackSend ( color: ${env.GREEN}, message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL}consoleText) (${env.COMMIT_MSG}) (${env.COMMIT_AUTHOR})")
         }
         failure {
-            slackSend ( color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL}consoleText) (${env.COMMIT_MSG}) (${env.COMMIT_AUTHOR})")
+            slackSend ( color: ${env.RED}, message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL}consoleText) (${env.COMMIT_MSG}) (${env.COMMIT_AUTHOR})")
             // slackSend (channel: '#migrator', color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
         }
     }
     environment {
-        TARGET_HOST = "root@192.168.20.1"
+        GREEN = '#00FF00'
+        RED = '#FF0000'
         COMMIT_MSG = get_commit_msg()
         COMMIT_AUTHOR = get_commit_author() 
     }
