@@ -38,8 +38,9 @@ pipeline {
         // when {
         //     expression { (env.GIT_BRANCH).endsWith('main') == True }
         // }
+            
             when {
-                branch "origin/main"
+                expression { env.GIT_BRANCH == 'origin/main' }
             }
         
             steps {
