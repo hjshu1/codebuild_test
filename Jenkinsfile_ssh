@@ -15,7 +15,7 @@ pipeline {
     stages {
         stage('Start Build') {
             steps {
-                slackSend ( color: "${env.GREEN}", message: "[START BUILD]: ${env.JOB_NAME}:[${env.BRANCH_NAME}]\n ${env.COMMIT_AUTHOR}:${env.COMMIT_MSG}\n(${env.BUILD_URL}consoleText) ")
+                slackSend ( color: "${env.GREEN}", message: "[START BUILD]: ${env.JOB_NAME}:[${env.GIT_LOCAL_BRANCH}]\n ${env.COMMIT_AUTHOR}:${env.COMMIT_MSG}\n(${env.BUILD_URL}consoleText) ")
             }
         }
 
