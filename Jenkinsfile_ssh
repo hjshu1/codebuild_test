@@ -35,7 +35,7 @@ pipeline {
         }
         stage('Build main') {
             when {
-                expression { env.GIT_BRANCH == 'main' }
+                expression { env.GIT_BRANCH.endsWith('main') == True }
             }
             steps {        
                 echo 'adgsd'
