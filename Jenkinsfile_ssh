@@ -39,7 +39,7 @@ pipeline {
         //     expression { (env.GIT_BRANCH).endsWith('main') == True }
         // }
             when {
-                branch "main"
+                branch "origin/main"
             }
         
             steps {
