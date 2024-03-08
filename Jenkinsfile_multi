@@ -28,30 +28,22 @@ pipeline {
         DOCKER_PROD_OPT = '-p 3020:3020 -e STAGE=dev --network server_net --ip 192.168.20.30'
     }
     stages {
-        // stage('Start Build') {
-        //     steps {
-        //         script {
-        //             def THEJOB = "${JOB_NAME.substring(JOB_NAME.lastIndexOf('/') + 1, JOB_NAME.length())}"
-        //             def PROJECT = "${JOB_NAME.substring(0, JOB_NAME.lastIndexOf('/'))}"
-                
-        //             slackSend ( channel: "${env.SLACK_DEV}", color: "${env.GREEN}", message: "[START]\nTime: ${env.BUILD_TIMESTAMP}\nProject: ${env.JOB_NAME}\nCommit User: ${env.COMMIT_AUTHOR}\nCommit Msg: ${env.COMMIT_MSG}")
-        //             slackSend ( channel: "${env.SLACK_DEV}", color: "${env.GREEN}", message: "workspace: ${env.WORKSPACE}}\n CHANGE_TARGET: ${PROJECT}\nBRANCH: ${env.BRANCH_NAME}")
-        //         }
-        //     }
-        // }
+        stage('Start Build') {
+            steps {
+                script {
+                    def THEJOB = "${JOB_NAME.substring(JOB_NAME.lastIndexOf('/') + 1, JOB_NAME.length())}"
+                    def PROJECT = "${JOB_NAME.substring(0, JOB_NAME.lastIndexOf('/'))}"
+                    // if ( "${env.BRANCH_NAME}" == 'develop' ) {
+                    // }
+                    slackSend ( channel: "${env.SLACK_DEV}", color: "${env.GREEN}", message: "*[START]*\nTime: ${env.BUILD_TIMESTAMP}\nProject: ${env.JOB_NAME}\nCommit User: ${env.COMMIT_AUTHOR}\nCommit Msg: ${env.COMMIT_MSG}")
+                    slackSend ( channel: "${env.SLACK_DEV}", color: "${env.GREEN}", message: "workspace: ${env.WORKSPACE}}\n CHANGE_TARGET: ${PROJECT}\nBRANCH: ${env.BRANCH_NAME}")
+                }
+            }
+        }
 
         stage('Build Develop') {
             when {
                 branch 'develop'
-            }
-            steps{
-               script {
-                    def THEJOB = "${JOB_NAME.substring(JOB_NAME.lastIndexOf('/') + 1, JOB_NAME.length())}"
-                    def PROJECT = "${JOB_NAME.substring(0, JOB_NAME.lastIndexOf('/'))}"
-                
-                    slackSend ( channel: "${env.SLACK_DEV}", color: "${env.GREEN}", message: "[START]\nTime: ${env.BUILD_TIMESTAMP}\nProject: ${env.JOB_NAME}\nCommit User: ${env.COMMIT_AUTHOR}\nCommit Msg: ${env.COMMIT_MSG}")
-                    slackSend ( channel: "${env.SLACK_DEV}", color: "${env.GREEN}", message: "workspace: ${env.WORKSPACE}}\n CHANGE_TARGET: ${PROJECT}\nBRANCH: ${env.BRANCH_NAME}")
-                } 
             }
             steps {        
                 sshagent (credentials: ['jenkins_ssh_pri']) {
