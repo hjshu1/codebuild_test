@@ -17,7 +17,7 @@ pipeline {
         RED = '#FF0000'
         COMMIT_MSG = get_commit_msg()
         COMMIT_AUTHOR = get_commit_author()
-        NOW = ${Util.getTimeSpanString(System.currentTimeMillis())}
+        NOW = "${Util.getTimeSpanString(System.currentTimeMillis())}"
     }
     stages {
         stage('Start Build') {
