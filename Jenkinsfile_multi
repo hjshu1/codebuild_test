@@ -10,6 +10,7 @@ def get_commit_author(){
     }
 }
 
+
 pipeline {
     agent any
     environment {
@@ -17,12 +18,11 @@ pipeline {
         RED = '#FF0000'
         COMMIT_MSG = get_commit_msg()
         COMMIT_AUTHOR = get_commit_author()
-        TODAY = "${Util.getTimeSpanString(System.currentTimeMillis())}"
     }
     stages {
         stage('Start Build') {
             steps {
-                slackSend ( color: "${env.GREEN}", message: "[START]\nProject: ${env.JOB_NAME}\nCommit User: ${env.COMMIT_AUTHOR}\nCommit Msg: ${env.COMMIT_MSG}")
+                slackSend ( color: "${env.GREEN}", message: "[START]\nTime: ${env.BUILD_TIMESTAMP}\nProject: ${env.JOB_NAME}\nCommit User: ${env.COMMIT_AUTHOR}\nCommit Msg: ${env.COMMIT_MSG}")
             }
         }
 
@@ -51,7 +51,6 @@ pipeline {
                 sh """
 
                     ssh -o StrictHostKeyChecking=no ${SSH_DEV} '
-                    echo ${TODAY}
                     cd /root/HOME/childfunds/greenbell-front
                     docker stop greenbell-front-test
                     docker rm greenbell-front-test
