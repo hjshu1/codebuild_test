@@ -32,7 +32,7 @@ pipeline {
                     def PROJECT = "${JOB_NAME.substring(0, JOB_NAME.lastIndexOf('/'))}"
                 
                     slackSend ( color: "${env.GREEN}", message: "[START]\nTime: ${env.BUILD_TIMESTAMP}\nProject: ${env.JOB_NAME}\nCommit User: ${env.COMMIT_AUTHOR}\nCommit Msg: ${env.COMMIT_MSG}")
-                    slackSend ( color: "${env.GREEN}", message: "workspace: ${env.WORKSPACE}}\n CHANGE_TARGET: ${PROJECT}")
+                    slackSend ( color: "${env.GREEN}", message: "workspace: ${env.WORKSPACE}}\n CHANGE_TARGET: ${PROJECT}\nBRANCH: ${env.BRANCH_NAME}")
                 }
             }
         }
