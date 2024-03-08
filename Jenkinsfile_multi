@@ -89,12 +89,14 @@ pipeline {
     }
     post {
         success {
-            when {
-                branch 'main'
+            script {
+                branch 'main' {
+                    slackSend ( color: "${env.GREEN}", message: "[SUCCESS]\nProject: ${env.JOB_NAME}\nCommit User: ${env.COMMIT_AUTHOR}\nCommit Msg: ${env.COMMIT_MSG}\nConsole Log: ${env.BUILD_URL}consoleText")
+                }
             }
             // slackSend (channel: '#migrator', color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
             // slackSend ( color: "${env.GREEN}", message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL}consoleText) (${env.COMMIT_MSG}) (${env.COMMIT_AUTHOR})")
-            slackSend ( color: "${env.GREEN}", message: "[SUCCESS]\nProject: ${env.JOB_NAME}\nCommit User: ${env.COMMIT_AUTHOR}\nCommit Msg: ${env.COMMIT_MSG}\nConsole Log: ${env.BUILD_URL}consoleText")
+            
         }
         failure {
             // slackSend ( color: "${env.RED}", message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL}consoleText) (${env.COMMIT_MSG}) (${env.COMMIT_AUTHOR})")
