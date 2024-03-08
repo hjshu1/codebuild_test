@@ -52,7 +52,26 @@ pipeline {
             }
         }
         
-         stage('Build Main') {
+        //  stage('Build Main') {
+        //     when {
+        //         branch 'main'
+        //     }
+        //     steps {        
+        //         sshagent (credentials: ['jenkins_ssh_pri']) {
+        //         sh """
+        //             ssh -o StrictHostKeyChecking=no ${SSH_DEV} '
+        //             cd ${env.PROJECT_HOME}/${env.PROJECT_NAME}
+        //             git pull
+        //             docker stop ${env.PROJECT_NAME}
+        //             docker rm ${env.PROJECT_NAME}
+        //             docker build -t ${env.PROJECT_IMAGE} -f ${env.DOCKER_FILE} .
+        //             '
+        //         """
+        //         }
+        //     }
+        // }
+
+        stage('Run Main Docker') {
             when {
                 branch 'main'
             }
@@ -60,44 +79,25 @@ pipeline {
                 sshagent (credentials: ['jenkins_ssh_pri']) {
                 sh """
                     ssh -o StrictHostKeyChecking=no ${SSH_DEV} '
-                    cd ${env.PROJECT_HOME}/${env.PROJECT_NAME}
-                    git pull
-                    docker stop ${env.PROJECT_NAME}
-                    docker rm ${env.PROJECT_NAME}
-                    docker build -t ${env.PROJECT_IMAGE} -f ${env.DOCKER_FILE} .
+                    echo asdf
                     '
                 """
                 }
             }
-        }
-
-        stage('Run Develop Docker') {
-            when {
-                branch 'main'
-            }
-            steps {        
-                sshagent (credentials: ['jenkins_ssh_pri']) {
-                sh """
-                    ssh -o StrictHostKeyChecking=no ${SSH_DEV} '
-                    cd ${env.PROJECT_HOME}/${env.PROJECT_NAME}
-                    docker run -d --name ${env.PROJECT_NAME} ${DOCKER_DEV_OPT} ${env.PROJECT_IMAGE}
-                    '
-                """
+            post {
+                success {
+                    // slackSend (channel: '#migrator', color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+                    // slackSend ( color: "${env.GREEN}", message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL}consoleText) (${env.COMMIT_MSG}) (${env.COMMIT_AUTHOR})")
+                    slackSend ( color: "${env.GREEN}", message: "[SUCCESS]\nProject: ${env.JOB_NAME}\nCommit User: ${env.COMMIT_AUTHOR}\nCommit Msg: ${env.COMMIT_MSG}\nConsole Log: ${env.BUILD_URL}consoleText")
+                }
+                failure {
+                    // slackSend ( color: "${env.RED}", message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL}consoleText) (${env.COMMIT_MSG}) (${env.COMMIT_AUTHOR})")
+                    // slackSend (channel: '#migrator', color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+                    slackSend ( color: "${env.RED}", message: "[FAILURE]\nProject: ${env.JOB_NAME}\nCommit User: ${env.COMMIT_AUTHOR}\nCommit Msg: ${env.COMMIT_MSG}\nConsole Log: ${env.BUILD_URL}consoleText")
                 }
             }
         }
     }
 
-    post {
-        success {
-            // slackSend (channel: '#migrator', color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
-            // slackSend ( color: "${env.GREEN}", message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL}consoleText) (${env.COMMIT_MSG}) (${env.COMMIT_AUTHOR})")
-            slackSend ( color: "${env.GREEN}", message: "[SUCCESS]\nProject: ${env.JOB_NAME}\nCommit User: ${env.COMMIT_AUTHOR}\nCommit Msg: ${env.COMMIT_MSG}\nConsole Log: ${env.BUILD_URL}consoleText")
-        }
-        failure {
-            // slackSend ( color: "${env.RED}", message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL}consoleText) (${env.COMMIT_MSG}) (${env.COMMIT_AUTHOR})")
-            // slackSend (channel: '#migrator', color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
-            slackSend ( color: "${env.RED}", message: "[FAILURE]\nProject: ${env.JOB_NAME}\nCommit User: ${env.COMMIT_AUTHOR}\nCommit Msg: ${env.COMMIT_MSG}\nConsole Log: ${env.BUILD_URL}consoleText")
-        }
-    }
+
 }
