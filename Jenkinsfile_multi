@@ -17,7 +17,7 @@ pipeline {
         RED = '#FF0000'
         COMMIT_MSG = get_commit_msg()
         COMMIT_AUTHOR = get_commit_author()
-        NOW = "${Util.getTimeSpanString(System.currentTimeMillis())}"
+        TODAY = "${Util.getTimeSpanString(System.currentTimeMillis())}"
     }
     stages {
         stage('Start Build') {
@@ -51,7 +51,7 @@ pipeline {
                 sh """
 
                     ssh -o StrictHostKeyChecking=no ${SSH_DEV} '
-                    echo ${NOW}
+                    echo ${TODAY}
                     cd /root/HOME/childfunds/greenbell-front
                     docker stop greenbell-front-test
                     docker rm greenbell-front-test
