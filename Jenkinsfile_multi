@@ -17,6 +17,9 @@ pipeline {
         RED = '#FF0000'
         COMMIT_MSG = get_commit_msg()
         COMMIT_AUTHOR = get_commit_author()
+
+        SLACK_DEV = '#서현준테스트' // Default ""
+
         PROJECT_NAME = 'greenbell-api'
         PROJECT_IMAGE = 'greenbell-api-image'
         PROJECT_HOME = '/home/web/childfunds'
@@ -31,8 +34,8 @@ pipeline {
                     def THEJOB = "${JOB_NAME.substring(JOB_NAME.lastIndexOf('/') + 1, JOB_NAME.length())}"
                     def PROJECT = "${JOB_NAME.substring(0, JOB_NAME.lastIndexOf('/'))}"
                 
-                    slackSend ( channel: "", color: "${env.GREEN}", message: "[START]\nTime: ${env.BUILD_TIMESTAMP}\nProject: ${env.JOB_NAME}\nCommit User: ${env.COMMIT_AUTHOR}\nCommit Msg: ${env.COMMIT_MSG}")
-                    slackSend ( channel: "", color: "${env.GREEN}", message: "workspace: ${env.WORKSPACE}}\n CHANGE_TARGET: ${PROJECT}\nBRANCH: ${env.BRANCH_NAME}")
+                    slackSend ( channel: "${env.SLACK_DEV}", color: "${env.GREEN}", message: "[START]\nTime: ${env.BUILD_TIMESTAMP}\nProject: ${env.JOB_NAME}\nCommit User: ${env.COMMIT_AUTHOR}\nCommit Msg: ${env.COMMIT_MSG}")
+                    slackSend ( channel: "${env.SLACK_DEV}", color: "${env.GREEN}", message: "workspace: ${env.WORKSPACE}}\n CHANGE_TARGET: ${PROJECT}\nBRANCH: ${env.BRANCH_NAME}")
                 }
             }
         }
@@ -92,7 +95,7 @@ pipeline {
             script {
                 // def THEJOB = "${JOB_NAME.substring(JOB_NAME.lastIndexOf('/') + 1, JOB_NAME.length())}"
                 if ( "${env.BRANCH_NAME}" == 'develop' ) {
-                    slackSend ( channel: "", color: "${env.GREEN}", message: "[SUCCESS]\nProject: ${env.JOB_NAME}\nCommit User: ${env.COMMIT_AUTHOR}\nCommit Msg: ${env.COMMIT_MSG}\nConsole Log: ${env.BUILD_URL}consoleText")
+                    slackSend ( channel: "${env.SLACK_DEV}", color: "${env.GREEN}", message: "[SUCCESS]\nProject: ${env.JOB_NAME}\nCommit User: ${env.COMMIT_AUTHOR}\nCommit Msg: ${env.COMMIT_MSG}\nConsole Log: ${env.BUILD_URL}consoleText")
                 }
             }
             // slackSend (channel: '#migrator', color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
@@ -102,7 +105,7 @@ pipeline {
         failure {
             // slackSend ( color: "${env.RED}", message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL}consoleText) (${env.COMMIT_MSG}) (${env.COMMIT_AUTHOR})")
             // slackSend (channel: '#migrator', color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
-            slackSend ( channel: "", color: "${env.RED}", message: "[FAILURE]\nProject: ${env.JOB_NAME}\nCommit User: ${env.COMMIT_AUTHOR}\nCommit Msg: ${env.COMMIT_MSG}\nConsole Log: ${env.BUILD_URL}consoleText")
+            slackSend ( channel: "${env.SLACK_DEV}", color: "${env.RED}", message: "[FAILURE]\nProject: ${env.JOB_NAME}\nCommit User: ${env.COMMIT_AUTHOR}\nCommit Msg: ${env.COMMIT_MSG}\nConsole Log: ${env.BUILD_URL}consoleText")
         }
     }
 
