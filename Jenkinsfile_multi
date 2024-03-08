@@ -23,6 +23,7 @@ pipeline {
         stage('Start Build') {
             steps {
                 slackSend ( color: "${env.GREEN}", message: "[START]\nTime: ${env.BUILD_TIMESTAMP}\nProject: ${env.JOB_NAME}\nCommit User: ${env.COMMIT_AUTHOR}\nCommit Msg: ${env.COMMIT_MSG}")
+                slackSend ( color: "${env.GREEN}", message: "workspace: ${env.WORKSPACE}}\n checkout dir: ${env.GIT_CHECKOUT_DIR}")
             }
         }
 
