@@ -22,8 +22,11 @@ pipeline {
     stages {
         stage('Start Build') {
             steps {
+                script {
+                    THEJOB="${JOB_NAME.substring(JOB_NAME.lastIndexOf('/') + 1, JOB_NAME.length())}"
+                }
                 slackSend ( color: "${env.GREEN}", message: "[START]\nTime: ${env.BUILD_TIMESTAMP}\nProject: ${env.JOB_NAME}\nCommit User: ${env.COMMIT_AUTHOR}\nCommit Msg: ${env.COMMIT_MSG}")
-                slackSend ( color: "${env.GREEN}", message: "workspace: ${env.WORKSPACE}}\n CHANGE_TARGET: ${env.CHANGE_TARGET}")
+                slackSend ( color: "${env.GREEN}", message: "workspace: ${env.WORKSPACE}}\n CHANGE_TARGET: ${env.THEJOB}")
             }
         }
 
