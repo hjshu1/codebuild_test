@@ -10,7 +10,6 @@ def get_commit_author(){
     }
 }
 
-
 pipeline {
     agent any
     environment {
