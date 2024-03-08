@@ -22,7 +22,7 @@ pipeline {
     stages {
         stage('Start Build') {
             steps {
-                slackSend ( color: "${env.GREEN}", message: "[START BUILD]\nJob: ${env.JOB_NAME}\nCommit User: ${env.COMMIT_AUTHOR}\nCommit Msg: ${env.COMMIT_MSG}\nConsole: ${env.BUILD_URL}consoleText")
+                slackSend ( color: "${env.GREEN}", message: "[START]\nProject: ${env.JOB_NAME}\nCommit User: ${env.COMMIT_AUTHOR}\nCommit Msg: ${env.COMMIT_MSG}")
             }
         }
 
@@ -71,12 +71,12 @@ pipeline {
         success {
             // slackSend (channel: '#migrator', color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
             // slackSend ( color: "${env.GREEN}", message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL}consoleText) (${env.COMMIT_MSG}) (${env.COMMIT_AUTHOR})")
-            slackSend ( color: "${env.GREEN}", message: "[SUCCESS]\nJob: ${env.JOB_NAME}\nCommit User: ${env.COMMIT_AUTHOR}\nCommit Msg: ${env.COMMIT_MSG}\nConsole: ${env.BUILD_URL}consoleText")
+            slackSend ( color: "${env.GREEN}", message: "[SUCCESS]\nProject: ${env.JOB_NAME}\nCommit User: ${env.COMMIT_AUTHOR}\nCommit Msg: ${env.COMMIT_MSG}\nConsole Log: ${env.BUILD_URL}consoleText")
         }
         failure {
             // slackSend ( color: "${env.RED}", message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL}consoleText) (${env.COMMIT_MSG}) (${env.COMMIT_AUTHOR})")
             // slackSend (channel: '#migrator', color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
-            slackSend ( color: "${env.RED}", message: "[FAILURE]\nJob: ${env.JOB_NAME}\nCommit User: ${env.COMMIT_AUTHOR}\nCommit Msg: ${env.COMMIT_MSG}\nConsole: ${env.BUILD_URL}consoleText")
+            slackSend ( color: "${env.RED}", message: "[FAILURE]\nProject: ${env.JOB_NAME}\nCommit User: ${env.COMMIT_AUTHOR}\nCommit Msg: ${env.COMMIT_MSG}\nConsole Log: ${env.BUILD_URL}consoleText")
         }
     }
 }
