@@ -90,7 +90,7 @@ pipeline {
     post {
         success {
             script {
-                branch 'main' {
+                if (branch == 'main') {
                     slackSend ( color: "${env.GREEN}", message: "[SUCCESS]\nProject: ${env.JOB_NAME}\nCommit User: ${env.COMMIT_AUTHOR}\nCommit Msg: ${env.COMMIT_MSG}\nConsole Log: ${env.BUILD_URL}consoleText")
                 }
             }
