@@ -50,7 +50,7 @@ pipeline {
                 sh """
                     ssh -o StrictHostKeyChecking=no ${ssh_dev} '
                     cd /root/HOME/childfunds/greenbell-front
-                    docker build --build-arg BUILD=build-only:dev -t greenbell-front-image -f ./ci/Dockerfile .
+                    docker build --build-arg BUILD=build-only:dev -t greenbell-front-image-test -f ./ci/Dockerfile .
                     '
                 """
                 }
