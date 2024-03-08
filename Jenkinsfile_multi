@@ -50,7 +50,14 @@ pipeline {
                 sh """
                     ssh -o StrictHostKeyChecking=no ${ssh_dev} '
                     cd /root/HOME/childfunds/greenbell-front
+                    docker stop greenbell-api-test
+                    docker rm greenbell-api-test
                     docker build --build-arg BUILD=build-only:dev -t greenbell-front-image-test -f ./ci/Dockerfile .
+                    docker run -d --name greenbell-api-test -p 9020:9020 \
+                      -e STAGE=dev \
+                      --network server_net \
+                      --ip 192.168.20.90 \
+                      greenbell-api-image-test
                     '
                 """
                 }
