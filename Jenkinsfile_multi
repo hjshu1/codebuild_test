@@ -1,6 +1,6 @@
 def get_commit_msg(){
     script {
-        return sh(script : "git show -s --format=%B ${env.GIT_COMMIT}", returnStdout: true).trim()
+        return sh(script : "git show -s --format=%B ${env.GIT_COMMIT}", returnStdout: true).trim())
     }
 }
 
