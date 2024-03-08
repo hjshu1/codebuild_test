@@ -91,7 +91,7 @@ pipeline {
         success {
             script {
                 def THEJOB = "${JOB_NAME.substring(JOB_NAME.lastIndexOf('/') + 1, JOB_NAME.length())}"
-                if (THEJOB == 'main') {
+                if (THEJOB == 'develop') {
                     slackSend ( color: "${env.GREEN}", message: "[SUCCESS]\nProject: ${env.JOB_NAME}\nCommit User: ${env.COMMIT_AUTHOR}\nCommit Msg: ${env.COMMIT_MSG}\nConsole Log: ${env.BUILD_URL}consoleText")
                 }
             }
