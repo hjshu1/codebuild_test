@@ -95,11 +95,12 @@ pipeline {
         success {
             script {
                 // def THEJOB = "${JOB_NAME.substring(JOB_NAME.lastIndexOf('/') + 1, JOB_NAME.length())}"
+                def SUCCESS_MSG = "[SUCCESS]\nProject: ${env.JOB_NAME}\nCommit User: ${env.COMMIT_AUTHOR}\nCommit Msg: ${env.COMMIT_MSG}\nConsole Log: <${env.BUILD_URL}consoleText|로그보기>"
                 if ( "${env.BRANCH_NAME}" == 'develop' ) {
-                    slackSend ( channel: "${env.SLACK_DEV}", color: "${env.GREEN}", message: "[SUCCESS]\nProject: ${env.JOB_NAME}\nCommit User: ${env.COMMIT_AUTHOR}\nCommit Msg: ${env.COMMIT_MSG}\nConsole Log: <${env.BUILD_URL}consoleText|로그보기>")
+                    slackSend ( channel: "${env.SLACK_DEV}", color: "${env.GREEN}", message: "${SUCCESS_MSG}")
                 }
                 if ( "${env.BRANCH_NAME}" == 'main' ) {
-                    slackSend ( channel: "${env.SLACK_DEV}", color: "${env.GREEN}", message: "[SUCCESS]\nProject: ${env.JOB_NAME}\nCommit User: ${env.COMMIT_AUTHOR}\nCommit Msg: ${env.COMMIT_MSG}\nConsole Log: <${env.BUILD_URL}consoleText|로그보기>")
+                    slackSend ( channel: "${env.SLACK_DEV}", color: "${env.GREEN}", message: "${SUCCESS_MSG}")
                 }
             }
             // slackSend (channel: '#migrator', color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
