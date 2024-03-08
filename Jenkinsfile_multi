@@ -16,12 +16,13 @@ pipeline {
         GREEN = '#00FF00'
         RED = '#FF0000'
         COMMIT_MSG = get_commit_msg()
-        COMMIT_AUTHOR = get_commit_author() 
+        COMMIT_AUTHOR = get_commit_author()
+
     }
     stages {
         stage('Start Build') {
             steps {
-                slackSend ( color: "${env.GREEN}", message: "[START BUILD]: ${env.JOB_NAME}:[${env.BRANCH_NAME}]\n ${env.COMMIT_AUTHOR}:${env.COMMIT_MSG}\n(${env.BUILD_URL}consoleText) ")
+                slackSend ( color: "${env.GREEN}", message: "[START BUILD]\nJob: ${env.JOB_NAME}\nCommit User: ${env.COMMIT_AUTHOR}\nCommit Msg: ${env.COMMIT_MSG}\nConsole: ${env.BUILD_URL}consoleText")
             }
         }
 
@@ -32,7 +33,7 @@ pipeline {
             steps {        
                 sshagent (credentials: ['jenkins_ssh_pri']) {
                 sh """
-                    ssh -o StrictHostKeyChecking=no ${ssh_dev} '
+                    ssh -o StrictHostKeyChecking=no ${SSH_DEV} '
                     /bin/sh /root/HOME/run_front.sh
                     '
                 """
@@ -48,7 +49,7 @@ pipeline {
             steps {
                 sshagent (credentials: ['jenkins_ssh_pri']) {
                 sh """
-                    ssh -o StrictHostKeyChecking=no ${ssh_dev} '
+                    ssh -o StrictHostKeyChecking=no ${SSH_DEV} '
                     cd /root/HOME/childfunds/greenbell-front
                     docker stop greenbell-front-test
                     docker rm greenbell-front-test
@@ -69,11 +70,13 @@ pipeline {
     post {
         success {
             // slackSend (channel: '#migrator', color: '#00FF00', message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
-            slackSend ( color: "${env.GREEN}", message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL}consoleText) (${env.COMMIT_MSG}) (${env.COMMIT_AUTHOR})")
+            // slackSend ( color: "${env.GREEN}", message: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL}consoleText) (${env.COMMIT_MSG}) (${env.COMMIT_AUTHOR})")
+            slackSend ( color: "${env.GREEN}", message: "[SUCCESS]\nJob: ${env.JOB_NAME}\nCommit User: ${env.COMMIT_AUTHOR}\nCommit Msg: ${env.COMMIT_MSG}\nConsole: ${env.BUILD_URL}consoleText")
         }
         failure {
-            slackSend ( color: "${env.RED}", message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL}consoleText) (${env.COMMIT_MSG}) (${env.COMMIT_AUTHOR})")
+            // slackSend ( color: "${env.RED}", message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL}consoleText) (${env.COMMIT_MSG}) (${env.COMMIT_AUTHOR})")
             // slackSend (channel: '#migrator', color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
+            slackSend ( color: "${env.RED}", message: "[FAILURE]\nJob: ${env.JOB_NAME}\nCommit User: ${env.COMMIT_AUTHOR}\nCommit Msg: ${env.COMMIT_MSG}\nConsole: ${env.BUILD_URL}consoleText")
         }
     }
 }
