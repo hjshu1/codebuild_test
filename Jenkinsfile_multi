@@ -48,7 +48,7 @@ pipeline {
                 branch 'develop'
             }
             steps {        
-                sshagent (credentials: ['jenkins_ssh_pri']) {
+                sshagent (credentials: ['jenkins_dev3_ssh']) {
                 sh """
                     ssh -o StrictHostKeyChecking=no ${SSH_DEV} '
                     /bin/sh /root/HOME/run_front.sh
