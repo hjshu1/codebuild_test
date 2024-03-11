@@ -76,13 +76,12 @@ pipeline {
         //         }
         //     }
         // }
-
         stage('Run Main Docker') {
             when {
                 branch 'main'
             }
             steps {        
-                sshagent (credentials: ['jenkins_ssh_pri']) {
+                sshagent (credentials: ['jenkins_dev3_ssh']) {
                 sh """
                     ssh -o StrictHostKeyChecking=no ${SSH_DEV} '
                     echo asdf
