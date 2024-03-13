@@ -45,8 +45,8 @@ pipeline {
         stage('Build Develop') {
             when {
                 branch 'develop'
+                agent { label 'dev3-node' }
             }
-            agent { label 'dev3-node' }
             steps {        
                 sshagent (credentials: ['jenkins_dev3_ssh']) {
                 sh """
@@ -77,7 +77,7 @@ pipeline {
         //     }
         // }
         stage('Run Main Docker') {
-            agent { label 'dev3-node' }
+            agent { label 'dev1-node' }
             when {
                 branch 'main'
             }
