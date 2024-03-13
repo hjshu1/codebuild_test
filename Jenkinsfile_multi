@@ -45,7 +45,6 @@ pipeline {
         stage('Build Develop') {
             when {
                 branch 'develop'
-                agent { label 'dev3-node' }
             }
             steps {        
                 sshagent (credentials: ['jenkins_dev3_ssh']) {
@@ -97,7 +96,7 @@ pipeline {
         success {
             script {
                 // def THEJOB = "${JOB_NAME.substring(JOB_NAME.lastIndexOf('/') + 1, JOB_NAME.length())}"
-                def SUCCESS_MSG = "[SUCCESS]\nProject: ${env.JOB_NAME}\nCommit User: ${env.COMMIT_AUTHOR}\nCommit Msg: ${env.COMMIT_MSG}\nConsole Log: <${env.BUILD_URL}consoleText|로그보기>"
+                def SUCCESS_MSG = "[SUCCESS]\nProject: ${env.JOB_NAME}\nCommit User: ${env.COMMIT_AUTHOR}\nCommit Msg: ${env.COMMIT_MSG}\nConsole Log: <${env.BUILD_URL}consoleText|로그보기>\n${env.NOW}"
                 if ( "${env.BRANCH_NAME}" == 'develop' ) {
                     slackSend ( channel: "${env.SLACK_DEV}", color: "${env.GREEN}", message: "${SUCCESS_MSG}")
                 }
@@ -112,7 +111,7 @@ pipeline {
         failure {
             // slackSend ( color: "${env.RED}", message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL}consoleText) (${env.COMMIT_MSG}) (${env.COMMIT_AUTHOR})")
             // slackSend (channel: '#migrator', color: '#FF0000', message: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]' (${env.BUILD_URL})")
-            slackSend ( channel: "${env.SLACK_DEV}", color: "${env.RED}", message: "[FAILURE]\nProject: ${env.JOB_NAME}\nCommit User: ${env.COMMIT_AUTHOR}\nCommit Msg: ${env.COMMIT_MSG}\nConsole Log: ${env.BUILD_URL}consoleText")
+            slackSend ( channel: "${env.SLACK_DEV}", color: "${env.RED}", message: "[FAILURE]\nProject: ${env.JOB_NAME}\nCommit User: ${env.COMMIT_AUTHOR}\nCommit Msg: ${env.COMMIT_MSG}\nConsole Log: ${env.BUILD_URL}consoleText\n${env.NOW}")
         }
     }
 
