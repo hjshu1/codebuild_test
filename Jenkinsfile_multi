@@ -11,9 +11,7 @@ def get_commit_author(){
 }
 
 pipeline {
-    agent {
-        label 'dev1-node'
-    }
+    agent { label 'dev1-node' }
     environment {
         GREEN = '#00FF00'
         RED = '#FF0000'
@@ -31,6 +29,7 @@ pipeline {
     }
     stages {
         stage('Start Build') {
+            agent { label 'dev1-node' }
             steps {
                 script {
                     def THEJOB = "${JOB_NAME.substring(JOB_NAME.lastIndexOf('/') + 1, JOB_NAME.length())}"
@@ -47,6 +46,7 @@ pipeline {
             when {
                 branch 'develop'
             }
+            agent { label 'dev3-node' }
             steps {        
                 sshagent (credentials: ['jenkins_dev3_ssh']) {
                 sh """
@@ -77,6 +77,7 @@ pipeline {
         //     }
         // }
         stage('Run Main Docker') {
+            agent { label 'dev3-node' }
             when {
                 branch 'main'
             }
