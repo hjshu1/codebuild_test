@@ -12,7 +12,7 @@ def get_commit_author(){
 
 pipeline {
     agent {
-        label 'dev3-node'
+        label 'dev1-node'
     }
     environment {
         GREEN = '#00FF00'
