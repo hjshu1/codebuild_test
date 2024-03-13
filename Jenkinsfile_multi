@@ -81,7 +81,7 @@ pipeline {
                 branch 'main'
             }
             steps {        
-                sshagent (credentials: ['jenkins_ssh_pri']) {
+                sshagent (credentials: ['jenkins_dev1_ssh']) {
                 sh """
                     ssh -o StrictHostKeyChecking=no -o BatchMode=yes  ${SSH_DEV} '
                     echo asdf
