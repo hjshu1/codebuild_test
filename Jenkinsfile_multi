@@ -37,7 +37,7 @@ pipeline {
                     // if ( "${env.BRANCH_NAME}" == 'develop' ) {
                     // }
                     slackSend ( channel: "${env.SLACK_DEV}", color: "${env.GREEN}", message: "*[START]*\nTime: ${env.BUILD_TIMESTAMP}\nProject: ${env.JOB_NAME}\nCommit User: ${env.COMMIT_AUTHOR}\nCommit Msg: ${env.COMMIT_MSG}")
-                    slackSend ( channel: "${env.SLACK_DEV}", color: "${env.GREEN}", message: "workspace: ${env.WORKSPACE}}\n CHANGE_TARGET: ${PROJECT}\nBRANCH: ${env.BRANCH_NAME}")
+                    slackSend ( channel: "${env.SLACK_DEV}", color: "${env.GREEN}", message: "workspace: ${env.WORKSPACE}}\n CHANGE_TARGET: ${PROJECT}\nBRANCH: ${env.BRANCH_NAME}\n${env.NOW}")
                 }
             }
         }
