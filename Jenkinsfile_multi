@@ -12,7 +12,7 @@ def get_commit_author(){
 
 pipeline {
     agent {
-        label 'dev1-node'
+        label 'dev3-node'
     }
     environment {
         GREEN = '#00FF00'
@@ -81,7 +81,7 @@ pipeline {
                 branch 'main'
             }
             steps {        
-                sshagent (credentials: ['jenkins_dev3_ssh']) {
+                sshagent (credentials: ['jenkins_ssh_pri']) {
                 sh """
                     ssh -o StrictHostKeyChecking=no ${SSH_DEV} '
                     echo asdf
