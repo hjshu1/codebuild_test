@@ -50,7 +50,7 @@ pipeline {
             steps {        
                 sshagent (credentials: ['jenkins_dev3_ssh']) {
                 sh """
-                    ssh -o StrictHostKeyChecking=no ${SSH_DEV} '
+                    ssh -o StrictHostKeyChecking=no -o BatchMode=yes ${SSH_DEV} '
                     /bin/sh /root/HOME/run_front.sh
                     '
                 """
