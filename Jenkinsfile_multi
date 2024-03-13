@@ -83,7 +83,7 @@ pipeline {
             steps {        
                 sshagent (credentials: ['jenkins_ssh_pri']) {
                 sh """
-                    ssh -o StrictHostKeyChecking=no ${SSH_DEV} '
+                    ssh -o StrictHostKeyChecking=no -o BatchMode=yes  ${SSH_DEV} '
                     echo asdf
                     '
                 """
